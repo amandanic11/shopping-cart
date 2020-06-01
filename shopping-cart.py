@@ -42,12 +42,16 @@ OPTIONS = ["id", "DONE"]
 
 #User inputs
 
-product_id = input("Please input a product identifier, or enter DONE when finished: ")
-#input numbers = str
-product_attributes = [p for p in products if str(p["id"]) == str(product_id)]
-unique_product = product_attributes[0]
-price_usd = to_usd(unique_product["price"])
-print(f"SELECTED PRODUCT: {unique_product['name']} ({str(price_usd)})")
+
+while True:
+    product_id = input("Please input a product identifier, or enter DONE when finished: ")
+    if product_id == "DONE":
+        break
+    else:    
+        product_attributes = [p for p in products if str(p["id"]) == str(product_id)]
+        unique_product = product_attributes[0]
+        price_usd = to_usd(unique_product["price"])
+        print(f"SELECTED PRODUCT: {unique_product['name']} ({str(price_usd)})")
 
 # while product_id == "id":
 #     input("Please input a product identifier, or enter DONE when finished: ")
