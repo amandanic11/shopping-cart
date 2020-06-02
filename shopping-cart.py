@@ -1,5 +1,8 @@
 # shopping_cart.py
 
+import datetime
+now = datetime.datetime.now()
+
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -37,45 +40,46 @@ def to_usd(my_price):
 
 # TODO: write some Python code here to produce the desired output
 
-
-
-
 #User inputs
 total_price = 0
+product_ids = []
 
 while True:
     product_id = input("Please input a product identifier, or enter DONE when finished: ")
+    # except ValueError:
+    #     print("Identifier not recognized. Please try again.")
+    #     continue
     if product_id == "DONE":
-        break 
+        break
     else:    
-        product_attributes = [p for p in products if str(p["id"]) == str(product_id)]
-        unique_product = product_attributes[0]
-        #price_usd = to_usd(unique_product["price"])
-        total_price = total_price + unique_product["price"]
-        print(total_price)
-        print("SELECTED PRODUCT: " + str(unique_product['name']) + " " + str(unique_product['price']))
-        
+        product_ids.append(product_id)
+       
 
 #Program Outputs
 
-# print("---------------------------------")
-# print("NOOK'S CRANNY")
-# print(WWW.NOOKS.COM)
-# print("---------------------------------")
-
+print("---------------------------------")
+print("THANK YOU FOR SHOPPING AT NOOK'S CRANNY")
+print("www.nooks.com")
+print("---------------------------------")
+print("CHECKOUT AT: " + str(now))
+print("---------------------------------")
+print("SELECTED PRODUCTS:")
+for product_id in product_ids:
+        product_attributes = [p for p in products if str(p["id"]) == str(product_id)]
+        unique_product = product_attributes[0]
+        total_price = total_price + unique_product["price"]
+        price_usd = to_usd(unique_product["price"])
+        print(f"+ {str(unique_product['name'])} ({price_usd})")
+print("---------------------------------")
 subtotal_p = to_usd(total_price)
 print("SUBTOTAL: " + str(subtotal_p))
-#tax_price = subtotal_p * 0.0875
-#function needs to insert subtotal_p into tax_price calc
-tax_price = str(subtotal_p) * str(0.0875)
-print(tax_price)
-# def tax_price(subtotal_p):
-#     return subtotal_p * 0.0875
-#     print(tax_price)
-print("TAX:" + str(tax_price))
-
-final_total = subtotal_p + tax_price
-print("TOTAL: " + final_total)
-
-
-#print(products)
+tax_price = to_usd(total_price * 0.0875)
+print("TAX (8.75%):" + str(tax_price))
+def final_total(total_price, tax):
+    return (total_price * tax) + total_price
+tax = 0.0875
+f_total = to_usd(final_total(total_price, tax))
+print(f"TOTAL: {f_total}")
+print("---------------------------------")
+print("THANK YOU, PLEASE COME AGAIN")
+print("---------------------------------")
