@@ -38,35 +38,23 @@ def to_usd(my_price):
 # TODO: write some Python code here to produce the desired output
 
 
-OPTIONS = ["id", "DONE"]
+
 
 #User inputs
-
+total_price = 0
 
 while True:
     product_id = input("Please input a product identifier, or enter DONE when finished: ")
     if product_id == "DONE":
-        break
+        break 
     else:    
         product_attributes = [p for p in products if str(p["id"]) == str(product_id)]
         unique_product = product_attributes[0]
-        price_usd = to_usd(unique_product["price"])
-        print(f"SELECTED PRODUCT: {unique_product['name']} ({str(price_usd)})")
-
-# while product_id == "id":
-#     input("Please input a product identifier, or enter DONE when finished: ")
-# # else product_id != OPTIONS:
-#     input("Are you sure that product identifier is correct? Please try again: ")
-# else product_id == "DONE"
-
-# for p in products:
-#     
-#     if product_id != OPTIONS:
-#         input("Are you sure that product identifier is correct? Please try again: ")
-#     elif product_id = "id":
-#         input("PLease input a product identifier, or enter DONE when finished: ")
-#     elif product_id = "DONE":
-#         pass
+        #price_usd = to_usd(unique_product["price"])
+        total_price = total_price + unique_product["price"]
+        print(total_price)
+        print("SELECTED PRODUCT: " + str(unique_product['name']) + " " + str(unique_product['price']))
+        
 
 #Program Outputs
 
@@ -75,6 +63,19 @@ while True:
 # print(WWW.NOOKS.COM)
 # print("---------------------------------")
 
+subtotal_p = to_usd(total_price)
+print("SUBTOTAL: " + str(subtotal_p))
+#tax_price = subtotal_p * 0.0875
+#function needs to insert subtotal_p into tax_price calc
+tax_price = str(subtotal_p) * str(0.0875)
+print(tax_price)
+# def tax_price(subtotal_p):
+#     return subtotal_p * 0.0875
+#     print(tax_price)
+print("TAX:" + str(tax_price))
+
+final_total = subtotal_p + tax_price
+print("TOTAL: " + final_total)
 
 
 #print(products)
