@@ -1,7 +1,25 @@
 # shopping_cart.py
 
+# shopping_cart_backup.py
+
 import datetime
+import os
+import pandas as pd 
+import csv
+from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 now = datetime.datetime.now()
+
+# product_filepath = os.path.join(os.path.dirname(__file__), "product_list.csv")
+# product_filename = "product_list.csv"
+
+
+#set SENDGRID_API_KEY = "environments/sendgrid_api_key.env"
+# SENDGRID_API_KEY = os.environ.get("sendgrid_api_key.env", "Oops, please set env var called sendgrid_api_key")
+# SENDGRID_TEMPLATE_ID = os.environ.get("sendgrid_template_id.env", "Oops, please set env var called sendgrid_template_id")
+# MY_ADDRESS = os.environ.get("my_email_address.env", "Oops, please set env var called my_email_address")
 
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
@@ -26,6 +44,8 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
+#products = pd.read_csv(product_filename)
+
 def to_usd(my_price):
     # """
     # Converts a numeric value to usd-formatted string, for printing and display purposes.
@@ -38,21 +58,20 @@ def to_usd(my_price):
     # """
     return f"${my_price:,.2f}" #> $12,000.71
 
-# TODO: write some Python code here to produce the desired output
-
 #User inputs
 total_price = 0
 product_ids = []
 
+valid_ids = [product["id"] for product in products]
+
 while True:
     product_id = input("Please input a product identifier, or enter DONE when finished: ")
-    # except ValueError:
-    #     print("Identifier not recognized. Please try again.")
-    #     continue
     if product_id == "DONE":
         break
+    elif int(product_id) in valid_ids:
+        product_ids.append(int(product_id))
     else:    
-        product_ids.append(product_id)
+        print("Identifier not recognized, please try again.")
        
 
 #Program Outputs
@@ -64,9 +83,10 @@ print("---------------------------------")
 print("CHECKOUT AT: " + str(now))
 print("---------------------------------")
 print("SELECTED PRODUCTS:")
+
 for product_id in product_ids:
-        product_attributes = [p for p in products if str(p["id"]) == str(product_id)]
-        unique_product = product_attributes[0]
+        selected_products = [p for p in products if p["id"] == product_id]
+        unique_product = selected_products[0]
         total_price = total_price + unique_product["price"]
         price_usd = to_usd(unique_product["price"])
         print(f"+ {str(unique_product['name'])} ({price_usd})")
@@ -83,3 +103,34 @@ print(f"TOTAL: {f_total}")
 print("---------------------------------")
 print("THANK YOU, PLEASE COME AGAIN")
 print("---------------------------------")
+
+# template_data = {
+#     "total_price_usd": "$14.95",
+#     "human_friendly_timestamp": "June 1st, 2019 10:00 AM",
+#     "products":[
+#         {"id":1, "name": "Product 1"},
+#         {"id":2, "name": "Product 2"},
+#         {"id":3, "name": "Product 3"},
+#         {"id":2, "name": "Product 2"},
+#         {"id":1, "name": "Product 1"}
+#     ]
+#   }
+
+# client = SendGridAPIClient(SENDGRID_API_KEY)
+# print("CLIENT: ", type(client))
+# message = Mail(from_email=MY_ADDRESS, to_emails=MY_ADDRESS)
+# print("MESSAGE", type(message))
+# print(SENDGRID_API_KEY)
+
+# message.template_id = SENDGRID_TEMPLATE_ID
+
+# message.dynamic_template_data = template_data
+
+# try:
+#     response = client.send(message)
+#     print("RESPONSE:", type(response))
+#     print(response.status_code)
+#     print(response.body)
+#     print(response.headers)
+# except Exception as e:
+#     print("OOPS", e)
